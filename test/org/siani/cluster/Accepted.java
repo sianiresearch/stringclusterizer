@@ -11,15 +11,13 @@ public class Accepted {
         Cluster<String> cluster = new Clusterizer<String>().clusterize("a1011", "a2002", "b2012");
         assertEquals("", cluster.id());
         assertEquals(3, cluster.size());
-        assertEquals(1, cluster.clusters().length);
+        assertEquals(1, cluster.clusters().size());
 
-        assertEquals("a", cluster.clusters()[0].id());
-        assertEquals(2, cluster.clusters()[0].size());
-        assertEquals("a1011", cluster.clusters()[0].items().get(0));
-        assertEquals("a2002", cluster.clusters()[0].items().get(1));
-        assertEquals(0, cluster.clusters()[0].clusters().length);
-
-        System.out.println(cluster.toString());
+        assertEquals("a", cluster.clusters().get(0).id());
+        assertEquals(2, cluster.clusters().get(0).size());
+        assertEquals("a1011", cluster.clusters().get(0).items().get(0));
+        assertEquals("a2002", cluster.clusters().get(0).items().get(1));
+        assertEquals(0, cluster.clusters().get(0).clusters().size());
     }
 
     @Test
@@ -27,15 +25,13 @@ public class Accepted {
         Cluster<String> cluster = new Clusterizer<String>().clusterize("a2011", "a2002", "b2012");
         assertEquals("", cluster.id());
         assertEquals(3, cluster.size());
-        assertEquals(1, cluster.clusters().length);
+        assertEquals(1, cluster.clusters().size());
 
-        assertEquals("a20", cluster.clusters()[0].id());
-        assertEquals(2, cluster.clusters()[0].size());
-        assertEquals("a2011", cluster.clusters()[0].items().get(0));
-        assertEquals("a2002", cluster.clusters()[0].items().get(1));
-        assertEquals(0, cluster.clusters()[0].clusters().length);
-
-        System.out.println(cluster.toString());
+        assertEquals("a20", cluster.clusters().get(0).id());
+        assertEquals(2, cluster.clusters().get(0).size());
+        assertEquals("a2011", cluster.clusters().get(0).items().get(0));
+        assertEquals("a2002", cluster.clusters().get(0).items().get(1));
+        assertEquals(0, cluster.clusters().get(0).clusters().size());
     }
 
     @Test
@@ -46,35 +42,33 @@ public class Accepted {
                 "P-0006-SM-Open", "P-0006-SM-Closed");
         assertEquals("P-000", cluster.id());
         assertEquals(6, cluster.size());
-        assertEquals(2, cluster.clusters().length);
+        assertEquals(2, cluster.clusters().size());
 
-        assertEquals("P-0005-", cluster.clusters()[0].id());
-        assertEquals(4, cluster.clusters()[0].size());
-        assertEquals("P-0005-SM-Open", cluster.clusters()[0].items().get(0));
-        assertEquals("P-0005-SM-Closed", cluster.clusters()[0].items().get(1));
-        assertEquals("P-0005-B-Open", cluster.clusters()[0].items().get(2));
-        assertEquals("P-0005-B-Closed", cluster.clusters()[0].items().get(3));
-        assertEquals(2, cluster.clusters()[0].clusters().length);
+        assertEquals("P-0005-", cluster.clusters().get(0).id());
+        assertEquals(4, cluster.clusters().get(0).size());
+        assertEquals("P-0005-SM-Open", cluster.clusters().get(0).items().get(0));
+        assertEquals("P-0005-SM-Closed", cluster.clusters().get(0).items().get(1));
+        assertEquals("P-0005-B-Open", cluster.clusters().get(0).items().get(2));
+        assertEquals("P-0005-B-Closed", cluster.clusters().get(0).items().get(3));
+        assertEquals(2, cluster.clusters().get(0).clusters().size());
 
-        assertEquals("P-0005-SM-", cluster.clusters()[0].clusters()[0].id());
-        assertEquals(2, cluster.clusters()[0].clusters()[0].size());
-        assertEquals("P-0005-SM-Open", cluster.clusters()[0].clusters()[0].items().get(0));
-        assertEquals("P-0005-SM-Closed", cluster.clusters()[0].clusters()[0].items().get(1));
-        assertEquals(0, cluster.clusters()[0].clusters()[0].clusters().length);
+        assertEquals("P-0005-SM-", cluster.clusters().get(0).clusters().get(0).id());
+        assertEquals(2, cluster.clusters().get(0).clusters().get(0).size());
+        assertEquals("P-0005-SM-Open", cluster.clusters().get(0).clusters().get(0).items().get(0));
+        assertEquals("P-0005-SM-Closed", cluster.clusters().get(0).clusters().get(0).items().get(1));
+        assertEquals(0, cluster.clusters().get(0).clusters().get(0).clusters().size());
 
-        assertEquals("P-0005-B-", cluster.clusters()[0].clusters()[1].id());
-        assertEquals(2, cluster.clusters()[0].clusters()[1].size());
-        assertEquals("P-0005-B-Open", cluster.clusters()[0].clusters()[1].items().get(0));
-        assertEquals("P-0005-B-Closed", cluster.clusters()[0].clusters()[1].items().get(1));
-        assertEquals(0, cluster.clusters()[1].clusters().length);
+        assertEquals("P-0005-B-", cluster.clusters().get(0).clusters().get(1).id());
+        assertEquals(2, cluster.clusters().get(0).clusters().get(1).size());
+        assertEquals("P-0005-B-Open", cluster.clusters().get(0).clusters().get(1).items().get(0));
+        assertEquals("P-0005-B-Closed", cluster.clusters().get(0).clusters().get(1).items().get(1));
+        assertEquals(0, cluster.clusters().get(1).clusters().size());
 
-        assertEquals("P-0006-SM-", cluster.clusters()[1].id());
-        assertEquals(2, cluster.clusters()[1].size());
-        assertEquals("P-0006-SM-Open", cluster.clusters()[1].items().get(0));
-        assertEquals("P-0006-SM-Closed", cluster.clusters()[1].items().get(1));
-        assertEquals(0, cluster.clusters()[1].clusters().length);
-
-        System.out.println(cluster.toString());
+        assertEquals("P-0006-SM-", cluster.clusters().get(1).id());
+        assertEquals(2, cluster.clusters().get(1).size());
+        assertEquals("P-0006-SM-Open", cluster.clusters().get(1).items().get(0));
+        assertEquals("P-0006-SM-Closed", cluster.clusters().get(1).items().get(1));
+        assertEquals(0, cluster.clusters().get(1).clusters().size());
     }
 
     @Test
@@ -92,41 +86,77 @@ public class Accepted {
 
         assertEquals("", cluster.id());
         assertEquals(9, cluster.size());
-        assertEquals(2, cluster.clusters().length);
+        assertEquals(2, cluster.clusters().size());
 
-        assertEquals("EI-000", cluster.clusters()[0].id());
-        assertEquals(2, cluster.clusters()[0].size());
-        assertEquals("EI-0002/15-A 18/05/2015", cluster.clusters()[0].items().get(0));
-        assertEquals("EI-0003/15-A 18/05/2015", cluster.clusters()[0].items().get(1));
-        assertEquals(0, cluster.clusters()[0].clusters().length);
+        assertEquals("EI-000", cluster.clusters().get(0).id());
+        assertEquals(2, cluster.clusters().get(0).size());
+        assertEquals("EI-0002/15-A 18/05/2015", cluster.clusters().get(0).items().get(0));
+        assertEquals("EI-0003/15-A 18/05/2015", cluster.clusters().get(0).items().get(1));
+        assertEquals(0, cluster.clusters().get(0).clusters().size());
 
-        assertEquals("P-000", cluster.clusters()[1].id());
-        assertEquals(7, cluster.clusters()[1].size());
-        assertEquals("P-0002/15-1: Señales Marítimas 12010", cluster.clusters()[1].items().get(0));
-        assertEquals("P-0002/15-2: Señales Marítimas 12095", cluster.clusters()[1].items().get(1));
-        assertEquals("P-0002/15-3: Señales-Firma", cluster.clusters()[1].items().get(2));
-        assertEquals("P-0003/15-1: Señales Marítimas 12024", cluster.clusters()[1].items().get(3));
-        assertEquals("P-0003/15-2: Señales Marítimas 12060", cluster.clusters()[1].items().get(4));
-        assertEquals("P-0003/15-3: Señales Marítimas 12000", cluster.clusters()[1].items().get(5));
-        assertEquals("P-0003/15-4: Señales Marítimas 12103", cluster.clusters()[1].items().get(6));
-        assertEquals(2, cluster.clusters()[1].clusters().length);
+        assertEquals("P-000", cluster.clusters().get(1).id());
+        assertEquals(7, cluster.clusters().get(1).size());
+        assertEquals("P-0002/15-1: Señales Marítimas 12010", cluster.clusters().get(1).items().get(0));
+        assertEquals("P-0002/15-2: Señales Marítimas 12095", cluster.clusters().get(1).items().get(1));
+        assertEquals("P-0002/15-3: Señales-Firma", cluster.clusters().get(1).items().get(2));
+        assertEquals("P-0003/15-1: Señales Marítimas 12024", cluster.clusters().get(1).items().get(3));
+        assertEquals("P-0003/15-2: Señales Marítimas 12060", cluster.clusters().get(1).items().get(4));
+        assertEquals("P-0003/15-3: Señales Marítimas 12000", cluster.clusters().get(1).items().get(5));
+        assertEquals("P-0003/15-4: Señales Marítimas 12103", cluster.clusters().get(1).items().get(6));
+        assertEquals(2, cluster.clusters().get(1).clusters().size());
 
-        assertEquals("P-0002/15-", cluster.clusters()[1].clusters()[0].id());
-        assertEquals(3, cluster.clusters()[1].clusters()[0].size());
-        assertEquals("P-0002/15-1: Señales Marítimas 12010", cluster.clusters()[1].clusters()[0].items().get(0));
-        assertEquals("P-0002/15-2: Señales Marítimas 12095", cluster.clusters()[1].clusters()[0].items().get(1));
-        assertEquals("P-0002/15-3: Señales-Firma", cluster.clusters()[1].clusters()[0].items().get(2));
-        assertEquals(0, cluster.clusters()[1].clusters()[0].clusters().length);
+        assertEquals("P-0002/15-", cluster.clusters().get(1).clusters().get(0).id());
+        assertEquals(3, cluster.clusters().get(1).clusters().get(0).size());
+        assertEquals("P-0002/15-1: Señales Marítimas 12010", cluster.clusters().get(1).clusters().get(0).items().get(0));
+        assertEquals("P-0002/15-2: Señales Marítimas 12095", cluster.clusters().get(1).clusters().get(0).items().get(1));
+        assertEquals("P-0002/15-3: Señales-Firma", cluster.clusters().get(1).clusters().get(0).items().get(2));
+        assertEquals(0, cluster.clusters().get(1).clusters().get(0).clusters().size());
 
-        assertEquals("P-0003/15-", cluster.clusters()[1].clusters()[1].id());
-        assertEquals(4, cluster.clusters()[1].clusters()[1].size());
-        assertEquals("P-0003/15-1: Señales Marítimas 12024", cluster.clusters()[1].clusters()[1].items().get(0));
-        assertEquals("P-0003/15-2: Señales Marítimas 12060", cluster.clusters()[1].clusters()[1].items().get(1));
-        assertEquals("P-0003/15-3: Señales Marítimas 12000", cluster.clusters()[1].clusters()[1].items().get(2));
-        assertEquals("P-0003/15-4: Señales Marítimas 12103", cluster.clusters()[1].clusters()[1].items().get(3));
-        assertEquals(0, cluster.clusters()[1].clusters()[1].clusters().length);
+        assertEquals("P-0003/15-", cluster.clusters().get(1).clusters().get(1).id());
+        assertEquals(4, cluster.clusters().get(1).clusters().get(1).size());
+        assertEquals("P-0003/15-1: Señales Marítimas 12024", cluster.clusters().get(1).clusters().get(1).items().get(0));
+        assertEquals("P-0003/15-2: Señales Marítimas 12060", cluster.clusters().get(1).clusters().get(1).items().get(1));
+        assertEquals("P-0003/15-3: Señales Marítimas 12000", cluster.clusters().get(1).clusters().get(1).items().get(2));
+        assertEquals("P-0003/15-4: Señales Marítimas 12103", cluster.clusters().get(1).clusters().get(1).items().get(3));
+        assertEquals(0, cluster.clusters().get(1).clusters().get(1).clusters().size());
+    }
 
-        System.out.println(cluster.toString());
+    @Test
+    public void should_cluster_using_extractor() throws Exception {
+        Cluster<Person> cluster = new Clusterizer<>(personExtractor()).clusterize(
+                new Person("Jose Juan", "Hernandez"),
+                new Person("Jose", "Evora"),
+                new Person("Octavio", "Roncal"),
+                new Person("Ruben", "Diaz"));
+
+        assertEquals("", cluster.id());
+        assertEquals(4, cluster.size());
+        assertEquals(1, cluster.clusters().size());
+
+        assertEquals("Jose ", cluster.clusters().get(0).id());
+        assertEquals(2, cluster.clusters().get(0).size());
+        assertEquals("Jose Juan Hernandez", personExtractor().extract(cluster.clusters().get(0).items().get(0)));
+        assertEquals("Jose Evora", personExtractor().extract(cluster.clusters().get(0).items().get(1)));
+        assertEquals(0, cluster.clusters().get(0).clusters().size());
+    }
+
+    private StringExtractor<Person> personExtractor() {
+        return new StringExtractor<Person>() {
+            @Override
+            public String extract(Person object) {
+                return object.name + " " + object.surname;
+            }
+        };
+    }
+
+    class Person{
+        final String name;
+        final String surname;
+
+        public Person(String name, String surname) {
+            this.name = name;
+            this.surname = surname;
+        }
     }
 
 }

@@ -82,7 +82,7 @@ public class Clusterizer<T> {
     private List<Cluster<T>> getLeafClusters(Cluster<T> root) {
         List<Cluster<T>> clusters = new ArrayList<>();
         for (Cluster<T> cluster : root.allClusters()) {
-            if (cluster.clusters().length > 0) continue;
+            if (cluster.clusters().size() > 0) continue;
             clusters.add(cluster);
         }
         return clusters;

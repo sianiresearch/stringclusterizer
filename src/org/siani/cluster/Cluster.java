@@ -23,8 +23,8 @@ public class Cluster<T> {
         return items;
     }
 
-    public Cluster[] clusters() {
-        return clusters.toArray(new Cluster[clusters.size()]);
+    public List<Cluster<T>> clusters() {
+        return clusters;
     }
 
     @Override
