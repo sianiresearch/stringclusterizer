@@ -32,7 +32,8 @@ public class Cluster {
     public Cluster[] allClusters() {
         List<Cluster> clusters = new ArrayList<>();
         clusters.add(this);
-        this.clusters.forEach(c -> clusters.addAll(Arrays.asList(c.allClusters())));
+        for (Cluster cluster : this.clusters)
+            clusters.addAll(Arrays.asList(cluster.allClusters()));
         return clusters.toArray(new Cluster[clusters.size()]);
     }
 
