@@ -8,12 +8,12 @@ import java.util.List;
 public class Cluster {
 
     private String id;
-    private final Collection<String> elements;
+    private final Collection<String> items;
     private final List<Cluster> clusters;
 
-    public Cluster(String id, Collection<String> elements) {
+    public Cluster(String id, Collection<String> items) {
         this.id = id;
-        this.elements = elements;
+        this.items = items;
         clusters = new ArrayList<>();
     }
 
@@ -21,28 +21,12 @@ public class Cluster {
         return id;
     }
 
-    public String[] elements() {
-        return elements.toArray(new String[elements.size()]);
+    public String[] items() {
+        return items.toArray(new String[items.size()]);
     }
 
     public Cluster[] clusters() {
         return clusters.toArray(new Cluster[clusters.size()]);
-    }
-
-    public Cluster[] allClusters() {
-        List<Cluster> clusters = new ArrayList<>();
-        clusters.add(this);
-        for (Cluster cluster : this.clusters)
-            clusters.addAll(Arrays.asList(cluster.allClusters()));
-        return clusters.toArray(new Cluster[clusters.size()]);
-    }
-
-    public void add(Cluster cluster){
-        clusters.add(cluster);
-    }
-
-    public int size() {
-        return elements.size();
     }
 
     @Override
@@ -50,13 +34,29 @@ public class Cluster {
         return toString("");
     }
 
-    private String toString(String prefix) {
-        String result = prefix  + "Cluster " + (id.isEmpty() ? "*" : id) + ", elements=" + elements;
-        for (Cluster cluster : clusters) result += "\n" + cluster.toString(prefix + "\t");
-        return result;
+    protected void id(String id) {
+        this.id = id;
     }
 
-    public void id(String id) {
-        this.id = id;
+    protected Cluster[] allClusters() {
+        List<Cluster> clusters = new ArrayList<>();
+        clusters.add(this);
+        for (Cluster cluster : this.clusters)
+            clusters.addAll(Arrays.asList(cluster.allClusters()));
+        return clusters.toArray(new Cluster[clusters.size()]);
+    }
+
+    protected void add(Cluster cluster){
+        clusters.add(cluster);
+    }
+
+    protected int size() {
+        return items.size();
+    }
+
+    private String toString(String prefix) {
+        String result = prefix  + "Cluster " + (id.isEmpty() ? "*" : id) + ", items=" + items;
+        for (Cluster cluster : clusters) result += "\n" + cluster.toString(prefix + "\t");
+        return result;
     }
 }
