@@ -1,17 +1,15 @@
 package org.siani.cluster;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-public class Cluster {
+public class Cluster<T> {
 
     private String id;
-    private final Collection<String> items;
-    private final List<Cluster> clusters;
+    private final List<T> items;
+    private final List<Cluster<T>> clusters;
 
-    public Cluster(String id, Collection<String> items) {
+    public Cluster(String id, List<T> items) {
         this.id = id;
         this.items = items;
         clusters = new ArrayList<>();
@@ -21,8 +19,8 @@ public class Cluster {
         return id;
     }
 
-    public String[] items() {
-        return items.toArray(new String[items.size()]);
+    public List<T> items() {
+        return items;
     }
 
     public Cluster[] clusters() {
@@ -38,15 +36,15 @@ public class Cluster {
         this.id = id;
     }
 
-    protected Cluster[] allClusters() {
-        List<Cluster> clusters = new ArrayList<>();
+    protected List<Cluster<T>> allClusters() {
+        List<Cluster<T>> clusters = new ArrayList<>();
         clusters.add(this);
-        for (Cluster cluster : this.clusters)
-            clusters.addAll(Arrays.asList(cluster.allClusters()));
-        return clusters.toArray(new Cluster[clusters.size()]);
+        for (Cluster<T> cluster : this.clusters)
+            clusters.addAll(cluster.allClusters());
+        return clusters;
     }
 
-    protected void add(Cluster cluster){
+    protected void add(Cluster<T> cluster){
         clusters.add(cluster);
     }
 
