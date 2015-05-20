@@ -159,7 +159,7 @@ public class Accepted {
     private void print(List<Item> items, String prefix) {
         for (Item item : items) {
             System.out.println(prefix + item.id());
-            print(item.children(), prefix + "\t");
+            print(item.items(), prefix + "\t");
         }
     }
 

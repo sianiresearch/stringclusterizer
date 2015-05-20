@@ -5,6 +5,6 @@ import java.util.List;
 public interface Item<T> {
     String id();
     T get();
-    List<Item<T>> children();
+    List<Item<T>> items();
     boolean isCluster();
 }

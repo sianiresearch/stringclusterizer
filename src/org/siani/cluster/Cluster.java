@@ -17,47 +17,6 @@ public class Cluster<T> implements Item {
         this.extractor = extractor;
     }
 
-    private List<Item> buildItems(List<T> items) {
-        List<Item> itemList = new ArrayList<>();
-        for (final T item : items) itemList.add(buildItem(item));
-        return itemList;
-    }
-
-    private Item buildItem(final T item) {
-        return new Item() {
-            @Override
-            public String id() {
-                return extractor.extract(item);
-            }
-
-            @Override
-            public Object get() {
-                return item;
-            }
-
-            @Override
-            public List<Item<T>> children() {
-                return new ArrayList<>();
-            }
-
-            @Override
-            public boolean isCluster() {
-                return false;
-            }
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public boolean equals(Object obj) {
-                return item.equals(((Item<T>)obj).get());
-            }
-
-            @Override
-            public String toString() {
-                return id();
-            }
-        };
-    }
-
     public String id() {
         return id;
     }
@@ -68,15 +27,6 @@ public class Cluster<T> implements Item {
     }
 
     @Override
-    public List<Item> children() {
-        return items();
-    }
-
-    @Override
-    public boolean isCluster() {
-        return true;
-    }
-
     public List<Item> items(){
         return Collections.unmodifiableList(items);
     }
@@ -99,8 +49,17 @@ public class Cluster<T> implements Item {
     }
 
     @Override
+    public boolean isCluster() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return toString("");
+    }
+
+    public int size() {
+        return elements().size();
     }
 
     protected void id(String id) {
@@ -126,10 +85,6 @@ public class Cluster<T> implements Item {
         return result;
     }
 
-    public int size() {
-        return elements().size();
-    }
-
     public void sort(Comparator<T> tComparator) {
         for (Cluster<T> cluster : clusters()) cluster.sort(tComparator);
         Collections.sort(items, buildComparator(tComparator));
@@ -149,5 +104,46 @@ public class Cluster<T> implements Item {
 
     private T elements(int i) {
         return elements().get(i).get();
+    }
+
+    private List<Item> buildItems(List<T> items) {
+        List<Item> itemList = new ArrayList<>();
+        for (final T item : items) itemList.add(buildItem(item));
+        return itemList;
+    }
+
+    private Item buildItem(final T item) {
+        return new Item() {
+            @Override
+            public String id() {
+                return extractor.extract(item);
+            }
+
+            @Override
+            public Object get() {
+                return item;
+            }
+
+            @Override
+            public List<Item<T>> items() {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public boolean isCluster() {
+                return false;
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean equals(Object obj) {
+                return obj instanceof Item && item.equals(((Item<T>) obj).get());
+            }
+
+            @Override
+            public String toString() {
+                return id();
+            }
+        };
     }
 }
