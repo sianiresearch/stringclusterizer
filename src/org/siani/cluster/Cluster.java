@@ -1,30 +1,101 @@
 package org.siani.cluster;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class Cluster<T> {
+public class Cluster<T> implements Item {
 
     private String id;
-    private final List<T> items;
-    private final List<Cluster<T>> clusters;
+    private final List<Item> items;
+    private StringExtractor<T> extractor;
 
-    public Cluster(String id, List<T> items) {
+    protected Cluster(String id, List<T> items, StringExtractor<T> extractor) {
         this.id = id;
-        this.items = items;
-        clusters = new ArrayList<>();
+        this.items = buildItems(items);
+        this.extractor = extractor;
+    }
+
+    private List<Item> buildItems(List<T> items) {
+        List<Item> itemList = new ArrayList<>();
+        for (final T item : items) itemList.add(buildItem(item));
+        return itemList;
+    }
+
+    private Item buildItem(final T item) {
+        return new Item() {
+            @Override
+            public String id() {
+                return extractor.extract(item);
+            }
+
+            @Override
+            public Object get() {
+                return item;
+            }
+
+            @Override
+            public List<Item<T>> children() {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public boolean isCluster() {
+                return false;
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean equals(Object obj) {
+                return item.equals(((Item<T>)obj).get());
+            }
+
+            @Override
+            public String toString() {
+                return id();
+            }
+        };
     }
 
     public String id() {
         return id;
     }
 
-    public List<T> items() {
-        return items;
+    @Override
+    public Cluster get() {
+        return this;
     }
 
+    @Override
+    public List<Item> children() {
+        return items();
+    }
+
+    @Override
+    public boolean isCluster() {
+        return true;
+    }
+
+    public List<Item> items(){
+        return Collections.unmodifiableList(items);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Item<T>> elements() {
+        List<Item<T>> elements = new ArrayList<>();
+        for (Item item : items)
+            if (!item.isCluster()) elements.add(item);
+            else elements.addAll(((Cluster<T>)item.get()).elements());
+        return Collections.unmodifiableList(elements);
+    }
+
+    @SuppressWarnings("unchecked")
     public List<Cluster<T>> clusters() {
-        return clusters;
+        List<Cluster<T>> clusters = new ArrayList<>();
+        for (Item item : items)
+            if (item.isCluster()) clusters.add((Cluster<T>) item);
+        return Collections.unmodifiableList(clusters);
     }
 
     @Override
@@ -39,22 +110,44 @@ public class Cluster<T> {
     protected List<Cluster<T>> allClusters() {
         List<Cluster<T>> clusters = new ArrayList<>();
         clusters.add(this);
-        for (Cluster<T> cluster : this.clusters)
+        for (Cluster<T> cluster : clusters())
             clusters.addAll(cluster.allClusters());
         return clusters;
     }
 
     protected void add(Cluster<T> cluster){
-        clusters.add(cluster);
-    }
-
-    protected int size() {
-        return items.size();
+        for (Item<T> item : cluster.elements()) items.remove(item);
+        items.add(cluster);
     }
 
     private String toString(String prefix) {
-        String result = prefix  + "Cluster " + (id.isEmpty() ? "*" : id) + ", items=" + items;
-        for (Cluster cluster : clusters) result += "\n" + cluster.toString(prefix + "\t");
+        String result = prefix  + "Cluster " + (id.isEmpty() ? "*" : id) + ", elements=" + items;
+        for (Cluster cluster : clusters()) result += "\n" + cluster.toString(prefix + "\t");
         return result;
+    }
+
+    public int size() {
+        return elements().size();
+    }
+
+    public void sort(Comparator<T> tComparator) {
+        for (Cluster<T> cluster : clusters()) cluster.sort(tComparator);
+        Collections.sort(items, buildComparator(tComparator));
+    }
+
+    @SuppressWarnings("unchecked")
+    private Comparator<? super Item> buildComparator(final Comparator<T> tComparator) {
+        return new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                T i1 = !o1.isCluster() ? (T)o1.get() : ((Cluster<T>)o1.get()).elements(0);
+                T i2 = !o2.isCluster() ? (T)o2.get() : ((Cluster<T>)o2.get()).elements(0);
+                return tComparator.compare(i1, i2);
+            }
+        };
+    }
+
+    private T elements(int i) {
+        return elements().get(i).get();
     }
 }

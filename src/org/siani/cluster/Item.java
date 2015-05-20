@@ -1,8 +1,10 @@
 package org.siani.cluster;
 
+import java.util.List;
+
 public interface Item<T> {
-
+    String id();
     T get();
-    boolean hasChildren();
-
+    List<Item<T>> children();
+    boolean isCluster();
 }

@@ -21,13 +21,13 @@ public class Clusterizer<T> {
 
     @SafeVarargs
     public final Cluster<T> clusterize(T... elements) {
-        Cluster<T> cluster = new Cluster<>("", Arrays.asList(elements));
+        Cluster<T> cluster = new Cluster<>("", Arrays.asList(elements), extractor);
         process(cluster);
         return cluster;
     }
 
     private void process(Cluster<T> cluster) {
-        int largestSize = largestElementSize(cluster.items());
+        int largestSize = largestElementSize(cluster.elements());
         for (int i = 0; i < largestSize; i++) processIndex(getLeafClusters(cluster), i);
     }
 
@@ -43,9 +43,9 @@ public class Clusterizer<T> {
 
     private Map<String, List<T>> buildClusterizationMap(Cluster<T> cluster, int index) {
         Map<String, List<T>> map = buildMap();
-        for (T element : cluster.items()) {
-            if (extract(element).length() <= index) continue;
-            map.get(extract(element).substring(0, index + 1)).add(element);
+        for (Item<T> element : cluster.elements()) {
+            if (extract(element.get()).length() <= index) continue;
+            map.get(extract(element.get()).substring(0, index + 1)).add(element.get());
         }
         return map;
     }
@@ -55,7 +55,7 @@ public class Clusterizer<T> {
     }
 
     private boolean thereIsOnlyOneCluster(Map<String, List<T>> map, Cluster cluster) {
-        return map.size() == 1 && map.values().iterator().next().size() == cluster.items().size();
+        return map.size() == 1 && map.values().iterator().next().size() == cluster.elements().size();
     }
 
     private void updateClusterId(Cluster cluster, Map<String, List<T>> map) {
@@ -65,7 +65,7 @@ public class Clusterizer<T> {
     private void createClusters(Cluster<T> cluster, Map<String, List<T>> map) {
         for (String key : map.keySet()) {
             if (map.get(key).size() == 1) continue;
-            cluster.add(new Cluster<>(key, map.get(key)));
+            cluster.add(new Cluster<>(key, map.get(key), extractor));
         }
     }
 
@@ -88,10 +88,10 @@ public class Clusterizer<T> {
         return clusters;
     }
 
-    private int largestElementSize(List<T> elements) {
+    private int largestElementSize(List<Item<T>> elements) {
         int largestSize = 0;
-        for (T element : elements)
-            largestSize = largestSize < extract(element).length() ? extract(element).length() : largestSize;
+        for (Item<T> element : elements)
+            largestSize = largestSize < extract(element.get()).length() ? extract(element.get()).length() : largestSize;
         return largestSize;
     }
 
