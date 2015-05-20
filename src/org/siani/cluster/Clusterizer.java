@@ -21,7 +21,11 @@ public class Clusterizer<T> {
 
     @SafeVarargs
     public final Cluster<T> clusterize(T... elements) {
-        Cluster<T> cluster = new Cluster<>("", Arrays.asList(elements), extractor);
+        return clusterize(Arrays.asList(elements));
+    }
+
+    public final Cluster<T> clusterize(List<T> elements) {
+        Cluster<T> cluster = new Cluster<>("", elements, extractor);
         process(cluster);
         return cluster;
     }
