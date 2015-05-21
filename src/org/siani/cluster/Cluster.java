@@ -1,62 +1,127 @@
 package org.siani.cluster;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class Cluster {
+class Cluster<T> implements Item {
 
     private String id;
-    private final Collection<String> items;
-    private final List<Cluster> clusters;
+    private Item parent;
+    private final ItemList<T> items;
+    private StringExtractor<T> extractor;
 
-    public Cluster(String id, Collection<String> items) {
+    protected Cluster(String id, List<T> items, StringExtractor<T> extractor) {
         this.id = id;
-        this.items = items;
-        clusters = new ArrayList<>();
+        this.parent = NullItem.instance();
+        this.items = buildItems(items);
+        this.extractor = extractor;
     }
 
+    @Override
     public String id() {
         return id;
     }
 
-    public String[] items() {
-        return items.toArray(new String[items.size()]);
-    }
-
-    public Cluster[] clusters() {
-        return clusters.toArray(new Cluster[clusters.size()]);
+    @Override
+    public Cluster get() {
+        return this;
     }
 
     @Override
-    public String toString() {
-        return toString("");
+    public Item parent() {
+        return parent;
     }
 
-    protected void id(String id) {
+    @Override
+    public ItemList<T> items(){
+        return items;
+    }
+
+    @SuppressWarnings("unchecked")
+    List<Item<T>> elements() {
+        List<Item<T>> elements = new ArrayList<>();
+        for (Item item : items)
+            if (!item.isGroup()) elements.add(item);
+            else elements.addAll(((Cluster<T>)item.get()).elements());
+        return Collections.unmodifiableList(elements);
+    }
+
+    @SuppressWarnings("unchecked")
+    List<Cluster<T>> clusters() {
+        List<Cluster<T>> clusters = new ArrayList<>();
+        for (Item item : items)
+            if (item.isGroup()) clusters.add((Cluster<T>) item);
+        return Collections.unmodifiableList(clusters);
+    }
+
+    @Override
+    public boolean isGroup() {
+        return true;
+    }
+
+    void id(String id) {
         this.id = id;
     }
 
-    protected Cluster[] allClusters() {
-        List<Cluster> clusters = new ArrayList<>();
+    List<Cluster<T>> allClusters() {
+        List<Cluster<T>> clusters = new ArrayList<>();
         clusters.add(this);
-        for (Cluster cluster : this.clusters)
-            clusters.addAll(Arrays.asList(cluster.allClusters()));
-        return clusters.toArray(new Cluster[clusters.size()]);
+        for (Cluster<T> cluster : clusters())
+            clusters.addAll(cluster.allClusters());
+        return clusters;
     }
 
-    protected void add(Cluster cluster){
-        clusters.add(cluster);
+    @SuppressWarnings("unchecked")
+    void add(Cluster<T> cluster){
+        cluster.parent = this;
+        for (Item<T> item : cluster.elements()) items.remove(item);
+        items.add(cluster);
     }
 
-    protected int size() {
-        return items.size();
+    private ItemList<T> buildItems(List<T> items) {
+        ItemList<T> itemList = new ItemList<>();
+        for (final T item : items) itemList.add(buildItem(item));
+        return itemList;
     }
 
-    private String toString(String prefix) {
-        String result = prefix  + "Cluster " + (id.isEmpty() ? "*" : id) + ", items=" + items;
-        for (Cluster cluster : clusters) result += "\n" + cluster.toString(prefix + "\t");
-        return result;
+    private Item<T> buildItem(final T item) {
+        return new Item<T>() {
+            @Override
+            public String id() {
+                return extractor.extract(item);
+            }
+
+            @Override
+            public T get() {
+                return item;
+            }
+
+            @Override
+            public Item parent() {
+                return this;
+            }
+
+            @Override
+            public ItemList<T> items() {
+                return new ItemList<>();
+            }
+
+            @Override
+            public boolean isGroup() {
+                return false;
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public boolean equals(Object obj) {
+                return obj instanceof Item && item.equals(((Item<T>) obj).get());
+            }
+
+            @Override
+            public String toString() {
+                return id();
+            }
+        };
     }
 }
