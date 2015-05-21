@@ -1,10 +1,10 @@
 package org.siani.cluster;
 
-import java.util.List;
-
 public interface Item<T> {
     String id();
+    /** Check item is not a group before calling this method **/
     T get();
-    List<Item<T>> items();
-    boolean isCluster();
+    Item parent();
+    ItemList<T> items();
+    boolean isGroup();
 }
