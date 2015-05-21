@@ -23,7 +23,7 @@ class NullItem implements Item{
 
     @Override
     public Item parent() {
-        return this;
+        return null;
     }
 
     @Override

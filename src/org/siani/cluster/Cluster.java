@@ -99,7 +99,7 @@ class Cluster<T> implements Item {
 
             @Override
             public Item parent() {
-                return this;
+                return Cluster.this;
             }
 
             @Override

@@ -19,7 +19,7 @@ public class ItemList<T> implements Iterable<Item<T>> {
         for (Item<T> item : items) item.items().sort(tComparator);
         Collections.sort(items, buildComparator(tComparator));
     }
-    
+
     public boolean isEmpty() {
         return items.isEmpty();
     }

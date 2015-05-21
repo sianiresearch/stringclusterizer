@@ -24,6 +24,7 @@ public class Accepted {
         assertFalse(item.items().get(1).items().get(0).isGroup());
         assertEquals("a2002", item.items().get(1).items().get(1).id());
         assertFalse(item.items().get(1).items().get(1).isGroup());
+        assertEquals("a", item.items().get(1).items().get(1).parent().id());
 
         System.out.println(item.items());
     }
