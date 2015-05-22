@@ -18,16 +18,21 @@ class NullItem implements Item{
 
     @Override
     public Object get() {
-        return null;
+        return this;
     }
 
     @Override
     public Item parent() {
-        return null;
+        return NullItem.instance();
     }
 
     @Override
     public ItemList items() {
+        return new ItemList();
+    }
+
+    @Override
+    public ItemList groupOfParent() {
         return new ItemList();
     }
 

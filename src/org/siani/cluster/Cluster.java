@@ -38,6 +38,11 @@ class Cluster<T> implements Item {
         return items;
     }
 
+    @Override
+    public ItemList groupOfParent() {
+        return parent().parent().items();
+    }
+
     @SuppressWarnings("unchecked")
     List<Item<T>> elements() {
         List<Item<T>> elements = new ArrayList<>();
@@ -105,6 +110,12 @@ class Cluster<T> implements Item {
             @Override
             public ItemList<T> items() {
                 return new ItemList<>();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public ItemList<T> groupOfParent() {
+                return parent().parent().items();
             }
 
             @Override

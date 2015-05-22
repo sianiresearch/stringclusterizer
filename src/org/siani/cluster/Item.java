@@ -6,5 +6,7 @@ public interface Item<T> {
     T get();
     Item parent();
     ItemList<T> items();
+    ItemList<T> groupOfParent();
     boolean isGroup();
+
 }
