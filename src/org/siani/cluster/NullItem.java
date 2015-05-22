@@ -1,6 +1,6 @@
 package org.siani.cluster;
 
-class NullItem implements Item{
+public class NullItem implements Item{
 
     private static NullItem instance = new NullItem();
 

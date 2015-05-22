@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="StringClusterizer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/StringClusterizer_jar</output-path>
+    <root id="root">
+      <element id="archive" name="StringClusterizer.jar">
+        <element id="module-output" name="StringClusterizer" />
+      </element>
+    </root>
+  </artifact>
+</component>
