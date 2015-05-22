@@ -197,6 +197,15 @@ public class Accepted {
         assertEquals(expected, items.toString());
     }
 
+    @Test
+    public void should_browse_properly_through_parents() throws Exception {
+        ItemList<String> items = new Clusterizer<String>().clusterize("a0", "a10", "a11");
+        assertEquals("a0", items.get(1).items().get(0).parent().group().get(0).id());
+        assertEquals("a0", items.get(1).items().get(1).parent().group().get(0).id());
+        assertEquals("a1", items.get(1).items().get(0).parent().group().get(1).id());
+        assertEquals("a1", items.get(1).items().get(1).parent().group().get(1).id());
+    }
+
     private Comparator<Register> registerComparator() {
         return new Comparator<Register>() {
             @Override

@@ -4,9 +4,9 @@ public interface Item<T> {
     String id();
     /** Check item is not a group before calling this method **/
     T get();
-    Item parent();
+    Item<T> parent();
     ItemList<T> items();
-    ItemList<T> groupOfParent();
+    ItemList<T> group();
     boolean isGroup();
 
 }

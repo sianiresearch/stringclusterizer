@@ -29,7 +29,8 @@ class Cluster<T> implements Item {
     }
 
     @Override
-    public Item parent() {
+    @SuppressWarnings("unchecked")
+    public Item<T> parent() {
         return parent;
     }
 
@@ -39,8 +40,8 @@ class Cluster<T> implements Item {
     }
 
     @Override
-    public ItemList groupOfParent() {
-        return parent().parent().items();
+    public ItemList group() {
+        return parent().items();
     }
 
     @SuppressWarnings("unchecked")
@@ -103,7 +104,8 @@ class Cluster<T> implements Item {
             }
 
             @Override
-            public Item parent() {
+            @SuppressWarnings("unchecked")
+            public Item<T> parent() {
                 return Cluster.this;
             }
 
@@ -114,8 +116,8 @@ class Cluster<T> implements Item {
 
             @Override
             @SuppressWarnings("unchecked")
-            public ItemList<T> groupOfParent() {
-                return parent().parent().items();
+            public ItemList<T> group() {
+                return parent().items();
             }
 
             @Override

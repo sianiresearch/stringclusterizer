@@ -32,7 +32,7 @@ public class NullItem implements Item{
     }
 
     @Override
-    public ItemList groupOfParent() {
+    public ItemList group() {
         return new ItemList();
     }
 
