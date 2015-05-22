@@ -18,8 +18,6 @@ public class ItemList<T> implements Iterable<Item<T>> {
     public void sort(Comparator<T> tComparator) {
         for (Item<T> item : items) item.items().sort(tComparator);
         Collections.sort(items, buildComparator(tComparator));
-
-
     }
 
     /** Items can be not well-clustered or ordered after this **/
