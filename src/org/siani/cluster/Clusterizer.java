@@ -20,16 +20,16 @@ public class Clusterizer<T> {
     }
 
     @SafeVarargs
-    public final Item<T> clusterize(T... elements) {
+    public final ItemList<T> clusterize(T... elements) {
         return clusterize(Arrays.asList(elements));
     }
 
     @SuppressWarnings("unchecked")
-    public final Item<T> clusterize(List<T> elements) {
-        if(elements.isEmpty()) return NullItem.instance();
+    public final ItemList<T> clusterize(List<T> elements) {
+        if(elements.isEmpty()) return new ItemList<>();
         Cluster<T> cluster = new Cluster<>("", elements, extractor);
         process(cluster);
-        return cluster;
+        return cluster.items();
     }
 
     private void process(Cluster<T> cluster) {

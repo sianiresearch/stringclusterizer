@@ -20,6 +20,10 @@ public class ItemList<T> implements Iterable<Item<T>> {
         Collections.sort(items, buildComparator(tComparator));
     }
 
+    public Item parent(){
+        return items.isEmpty() ? NullItem.instance() : items.get(0).parent();
+    }
+
     public boolean isEmpty() {
         return items.isEmpty();
     }
