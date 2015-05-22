@@ -22,6 +22,10 @@ public class ItemList<T> implements Iterable<Item<T>> {
 
     }
 
+    public List<Item<T>> edit(){
+        return items;
+    }
+
     public Item parent(){
         return items.isEmpty() ? NullItem.instance() : items.get(0).parent();
     }
