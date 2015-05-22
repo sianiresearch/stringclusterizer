@@ -22,6 +22,7 @@ public class ItemList<T> implements Iterable<Item<T>> {
 
     }
 
+    /** Items can be not well-clustered or ordered after this **/
     public List<Item<T>> edit(){
         return items;
     }
