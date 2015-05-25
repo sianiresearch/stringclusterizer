@@ -198,6 +198,33 @@ public class Accepted {
     }
 
     @Test
+    public void should_sort_multilevel_structures() throws Exception {
+        ItemList<String> items = new Clusterizer<String>().clusterize("100", "101", "110", "111", "000", "001", "010", "011");
+        items.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
+        String expected =
+                "0\n" +
+                "\t00\n" +
+                "\t\t000\n" +
+                "\t\t001\n" +
+                "\t01\n" +
+                "\t\t010\n" +
+                "\t\t011\n" +
+                "1\n" +
+                "\t10\n" +
+                "\t\t100\n" +
+                "\t\t101\n" +
+                "\t11\n" +
+                "\t\t110\n" +
+                "\t\t111\n";
+        assertEquals(expected, items.toString());
+    }
+
+    @Test
     public void should_browse_properly_through_parents() throws Exception {
         ItemList<String> items = new Clusterizer<String>().clusterize("a0", "a10", "a11");
         assertEquals("a0", items.get(1).items().get(0).parent().group().get(0).id());

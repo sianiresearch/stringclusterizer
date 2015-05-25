@@ -38,9 +38,15 @@ public class ItemList<T> implements Iterable<Item<T>> {
         return new Comparator<Item<T>>() {
             @Override
             public int compare(Item<T> o1, Item<T> o2) {
-                T i1 = o1.isGroup() ? o1.items().get(0).get() : o1.get();
-                T i2 = o2.isGroup() ? o2.items().get(0).get() : o2.get();
+                T i1 = getElement(o1);
+                T i2 = getElement(o2);
                 return tComparator.compare(i1, i2);
+            }
+
+            public T getElement(Item<T> item){
+                Item<T> toReturn = item;
+                while(toReturn.isGroup()) toReturn = toReturn.items().get(0);
+                return toReturn.get();
             }
         };
     }
