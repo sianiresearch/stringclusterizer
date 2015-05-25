@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class AcceptedRegexClusterizer<T> {
+public class AcceptedRegexClusterizer {
 
     @Test
     public void should_generate_hierarchy_based_on_pattern() throws Exception {
