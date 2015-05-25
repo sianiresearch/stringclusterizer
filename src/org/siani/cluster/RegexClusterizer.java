@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class RegexClusterizer<T> extends Clusterizer<T> {
 
-    private String regex;
+    private String pattern;
 
     public RegexClusterizer() {
     }
@@ -14,8 +14,8 @@ public class RegexClusterizer<T> extends Clusterizer<T> {
         super(extractor);
     }
 
-    public RegexClusterizer<T> split(String regex) {
-        this.regex = regex;
+    public RegexClusterizer<T> split(String pattern) {
+        this.pattern = pattern;
         return this;
     }
 
@@ -24,10 +24,14 @@ public class RegexClusterizer<T> extends Clusterizer<T> {
         Map<String, List<T>> map = buildMap();
         for (Item<T> element : cluster.elements()) {
             String suffix = extract(element.get()).substring(cluster.id().length());
-            String[] split = suffix.split(regex);
-            if(split.length == 1 || (split.length == 2 && split[0].isEmpty())) continue;
-            map.get(split[0].isEmpty() ? split[1] : split[0]).add(element.get());
+            String[] split = suffix.split(pattern);
+            if(split.length == 1) continue;
+            map.get(key(cluster, split)).add(element.get());
         }
         return map;
+    }
+
+    private String key(Cluster<T> cluster, String[] split) {
+        return (cluster.id().isEmpty() ? "" : cluster.id() + pattern) + (split[0].isEmpty() ? split[1] : split[0]);
     }
 }
