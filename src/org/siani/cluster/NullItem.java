@@ -4,7 +4,7 @@ public class NullItem implements Item{
 
     private static NullItem instance = new NullItem();
 
-    static Item instance(){
+    public static Item instance(){
         return instance;
     }
 
