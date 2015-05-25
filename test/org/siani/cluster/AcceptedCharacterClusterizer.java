@@ -5,15 +5,15 @@ import org.junit.Test;
 import java.util.Comparator;
 import java.util.Date;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class Accepted {
+public class AcceptedCharacterClusterizer {
 
     @Test
     public void should_clusterize_in_two_clusters() throws Exception {
-        ItemList<String> items = new Clusterizer<String>().clusterize("a1011", "a2002", "b2012");
+        ItemList<String> items = new CharacterClusterizer<String>().clusterize("a1011", "a2002", "b2012");
         assertEquals(2, items.size());
 
         assertEquals("b2012", items.get(0).id());
@@ -29,7 +29,7 @@ public class Accepted {
 
     @Test
     public void should_clusterize_in_two_clusters_making_prefix_up() throws Exception {
-        ItemList<String> items = new Clusterizer<String>().clusterize("a2011", "a2002", "b2012");
+        ItemList<String> items = new CharacterClusterizer<String>().clusterize("a2011", "a2002", "b2012");
         assertEquals(2, items.size());
 
         assertEquals("b2012", items.get(0).id());
@@ -45,7 +45,7 @@ public class Accepted {
 
     @Test
     public void should_clusterize_in_codes_according_to_different_patterns() throws Exception {
-        ItemList<String> items = new Clusterizer<String>().clusterize(
+        ItemList<String> items = new CharacterClusterizer<String>().clusterize(
                 "P-0005-SM-Open", "P-0005-SM-Closed",
                 "P-0005-B-Open", "P-0005-B-Closed",
                 "P-0006-SM-Open", "P-0006-SM-Closed");
@@ -81,7 +81,7 @@ public class Accepted {
 
     @Test
     public void should_clusterize_real_idenfitiers() throws Exception {
-        ItemList<String> items = new Clusterizer<String>().clusterize(
+        ItemList<String> items = new CharacterClusterizer<String>().clusterize(
                 "EI-0002/15-A 18/05/2015",
                 "P-0002/15-1: Señales Marítimas 12010",
                 "P-0002/15-2: Señales Marítimas 12095",
@@ -130,7 +130,7 @@ public class Accepted {
 
     @Test
     public void should_cluster_using_extractor() throws Exception {
-        ItemList<Person> items = new Clusterizer<>(personExtractor()).clusterize(
+        ItemList<Person> items = new CharacterClusterizer<>(personExtractor()).clusterize(
                 new Person("Jose Juan", "Hernandez"),
                 new Person("Jose", "Evora"),
                 new Person("Octavio", "Roncal"),
@@ -154,7 +154,7 @@ public class Accepted {
 
     @Test
     public void should_cluster_with_sorter() throws Exception {
-        ItemList<Person> items = new Clusterizer<>(personExtractor()).clusterize(
+        ItemList<Person> items = new CharacterClusterizer<>(personExtractor()).clusterize(
                 new Person("Jose Juan", "Hernandez"),
                 new Person("Jose", "Evora"),
                 new Person("Octavio", "Roncal"),
@@ -180,7 +180,7 @@ public class Accepted {
     @Test
     @SuppressWarnings("deprecation")
     public void should_sort_based_on_dates() throws Exception {
-        ItemList<Register> items = new Clusterizer<Register>().clusterize(
+        ItemList<Register> items = new CharacterClusterizer<Register>().clusterize(
                 new Register("a0", new Date(115, 0, 11)),
                 new Register("a1", new Date(115, 0, 13)),
                 new Register("b0", new Date(115, 0, 9)),
@@ -199,7 +199,7 @@ public class Accepted {
 
     @Test
     public void should_sort_multilevel_structures() throws Exception {
-        ItemList<String> items = new Clusterizer<String>().clusterize("100", "101", "110", "111", "000", "001", "010", "011");
+        ItemList<String> items = new CharacterClusterizer<String>().clusterize("100", "101", "110", "111", "000", "001", "010", "011");
         items.sort(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
@@ -226,7 +226,7 @@ public class Accepted {
 
     @Test
     public void should_browse_properly_through_parents() throws Exception {
-        ItemList<String> items = new Clusterizer<String>().clusterize("a0", "a10", "a11");
+        ItemList<String> items = new CharacterClusterizer<String>().clusterize("a0", "a10", "a11");
         assertEquals("a0", items.get(1).items().get(0).parent().group().get(0).id());
         assertEquals("a0", items.get(1).items().get(1).parent().group().get(0).id());
         assertEquals("a1", items.get(1).items().get(0).parent().group().get(1).id());
@@ -244,7 +244,7 @@ public class Accepted {
 
     @Test
     public void should_be_an_empty_list_when_clusterize_is_called_without_parameters() throws Exception {
-        assertTrue(new Clusterizer<String>().clusterize().isEmpty());
+        assertTrue(new CharacterClusterizer<String>().clusterize().isEmpty());
     }
 
     private Comparator<Person> personSorter() {

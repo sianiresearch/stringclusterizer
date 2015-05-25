@@ -2,9 +2,10 @@ package org.siani.cluster;
 
 import java.util.*;
 
-public class Clusterizer<T> {
+public abstract class Clusterizer<T> {
 
-    final StringExtractor<T> extractor;
+    protected final StringExtractor<T> extractor;
+    private final List<Cluster<T>> filteredLeafs = new ArrayList<>();
 
     public Clusterizer(){
         this.extractor = new StringExtractor<T>() {
@@ -32,33 +33,39 @@ public class Clusterizer<T> {
         return cluster.items();
     }
 
-    private void process(Cluster<T> cluster) {
-        int largestSize = largestElementSize(cluster.elements());
-        for (int i = 0; i < largestSize; i++) processIndex(getLeafClusters(cluster), i);
+    private void process(Cluster<T> cluster){
+        List<Cluster<T>> leafClusters = filter(getLeafClusters(cluster));
+        while(!leafClusters.isEmpty()) {
+            process(leafClusters);
+            leafClusters = filter(getLeafClusters(cluster));
+        }
     }
 
-    private void processIndex(List<Cluster<T>> leafClusters, int index) {
-        for (Cluster<T> cluster : leafClusters) clusterizeIndex(cluster, index);
+    private List<Cluster<T>> filter(List<Cluster<T>> leafClusters) {
+        List<Cluster<T>> result = new ArrayList<>();
+        for (Cluster<T> leafCluster : leafClusters) {
+            if(filteredLeafs.contains(leafCluster)) continue;
+            result.add(leafCluster);
+        }
+        return result;
     }
 
-    private void clusterizeIndex(Cluster<T> cluster, int index) {
-        Map<String, List<T>> map = buildClusterizationMap(cluster, index);
+    private void process(List<Cluster<T>> leafClusters) {
+        for (Cluster<T> leafCluster : leafClusters){
+            String id = leafCluster.id();
+            clusterize(leafCluster);
+            if (!id.equals(leafCluster.id()) || leafCluster.clusters().size() != 0) continue;
+            filteredLeafs.add(leafCluster);
+        }
+    }
+
+    private void clusterize(Cluster<T> cluster) {
+        Map<String, List<T>> map = buildClusterizationMap(cluster);
         if (thereIsOnlyOneCluster(map, cluster)) updateClusterId(cluster, map);
         else createClusters(cluster, map);
     }
 
-    private Map<String, List<T>> buildClusterizationMap(Cluster<T> cluster, int index) {
-        Map<String, List<T>> map = buildMap();
-        for (Item<T> element : cluster.elements()) {
-            if (extract(element.get()).length() <= index) continue;
-            map.get(extract(element.get()).substring(0, index + 1)).add(element.get());
-        }
-        return map;
-    }
-
-    private String extract(T element) {
-        return extractor.extract(element);
-    }
+    protected abstract Map<String, List<T>> buildClusterizationMap(Cluster<T> cluster);
 
     private boolean thereIsOnlyOneCluster(Map<String, List<T>> map, Cluster cluster) {
         return map.size() == 1 && map.values().iterator().next().size() == cluster.elements().size();
@@ -75,7 +82,7 @@ public class Clusterizer<T> {
         }
     }
 
-    private LinkedHashMap<String, List<T>> buildMap() {
+    protected LinkedHashMap<String, List<T>> buildMap() {
         return new LinkedHashMap<String, List<T>>() {
             @Override
             public List<T> get(Object key) {
@@ -85,7 +92,7 @@ public class Clusterizer<T> {
         };
     }
 
-    private List<Cluster<T>> getLeafClusters(Cluster<T> root) {
+    protected List<Cluster<T>> getLeafClusters(Cluster<T> root) {
         List<Cluster<T>> clusters = new ArrayList<>();
         for (Cluster<T> cluster : root.allClusters()) {
             if (cluster.clusters().size() > 0) continue;
@@ -94,11 +101,7 @@ public class Clusterizer<T> {
         return clusters;
     }
 
-    private int largestElementSize(List<Item<T>> elements) {
-        int largestSize = 0;
-        for (Item<T> element : elements)
-            largestSize = largestSize < extract(element.get()).length() ? extract(element.get()).length() : largestSize;
-        return largestSize;
+    protected String extract(T element) {
+        return extractor.extract(element);
     }
-
 }
